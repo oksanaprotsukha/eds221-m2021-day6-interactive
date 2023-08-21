@@ -1,5 +1,5 @@
 ---
-title: "EDS-221_Day6_Tidy_Data"
+title: "EDS-221 Day6 Tidy Data"
 format: html
 editor: visual
 ---
@@ -8,6 +8,7 @@ editor: visual
 
 ```{r}
 library(tidyverse)
+library(janitor)
 ```
 
 ### pivot_longer
@@ -29,8 +30,7 @@ dogs_longer <- dogs %>%
 ### pivot_wider
 
 ```{r}
-{r}
-dogs <- data.frame(dog_name = c("Cupcake", "Fliak"),week_1 = c(20, 17), week_2 = c(21, 30), week_3 = c(24, 40))
+# <TBD>
 
 ```
 
@@ -41,4 +41,70 @@ starwars_split <- starwars %>%
   separate(col = name,
            into = c("first_name", "last_name"), 
            sep = " ")
+```
+
+### Wild data - tidy examples
+
+```{r}
+wb_indicators <- read_csv(here::here("data", "wb_indicators.csv"), na = c("..", ""))
+```
+
+#### Step 1: convert variables under columns \`2001 \[YR2001\]\` : \`2020 \[YR2020\]\` to it's own separate column
+
+```{r}
+wb_indicators_long <- wb_indicators %>% 
+  pivot_longer(cols = `2001 [YR2001]` : `2020 [YR2020]`,
+               names_to = "Year",
+               values_to = "Indicator_value")
+```
+
+#### Step 2: split a year column to ensure that we have a single column with year values
+
+#### Step 3: drop unused columns 
+
+```{r}
+wb_indicators_clean <- wb_indicators_long %>% 
+  separate(col = Year, 
+           into = c("Year", "year_chr"),
+           sep = " "
+           ) %>% 
+  dplyr::select(-year_chr, -`Country Code`,-`Series Code`)
+wb_indicators_clean
+
+```
+
+#### 
+
+```{}
+```
+
+#### Step 4: Apply pivot_wider to convert unique series name values into columns
+
+```{r}
+
+wb_indicators_tidy <- wb_indicators_clean %>% 
+  # --- !droping a table does not make data tidy
+  tidyr::drop_na(`Series Name`) %>% 
+  pivot_wider(names_from = `Series Name`,
+              values_from = Indicator_value) %>% 
+  # --- rename columns (new name = old name)
+  dplyr::rename(country = "Country Name",
+                year = "Year",
+                access_clean_fuels_pp = "Access to clean fuels and technologies for cooking (% of population)",
+                access_electricity_pp = "Access to electricity (% of population)",
+                co2_emissions_kt = "CO2 emissions (kt)",
+                fossil_fuel_cons_pt = "Fossil fuel energy consumption (% of total)",
+                water_stress = "Level of water stress: freshwater withdrawal as a proportion of available freshwater resources"
+                ) %>% 
+  dplyr::mutate(year = as.numeric(year))
+```
+
+### Chart
+
+```{r}
+# CO2 emissions (kt) over the years
+co2_emissions_kt_chart <- ggplot(data = wb_indicators_tidy, aes(x = year, y = co2_emissions_kt))+
+  geom_line(aes(color = country)) +
+  theme(legend.position = "none")
+
 ```
