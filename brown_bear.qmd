@@ -1,0 +1,68 @@
+---
+title: "brown_bear"
+format: html
+editor: visual
+---
+
+```{r}
+
+animals <- c("brown bear", "red bird", "yellow duck", "blue horse")
+
+print_text <- function(animal1, animal2){
+  print(paste0(animal1, animal1, ", what do you see? I see a ",animal2, " looking at me"))
+}
+
+for (i in 1:(length(animals)-1)){
+  animal1 <- animals[i]
+  animal2 <- animals[i+1]
+  print_text(animal1,animal2)
+}
+
+
+
+```
+
+```{r}
+for (i in 1:(length(animals)-1)){
+print(paste0(animals[i], animals[i], ", what do you see? I see a ",animals[i+1], " looking at me"))
+}
+```
+
+## Tidy data
+
+```{r}
+library(tidyverse)
+```
+
+### pivot_longer
+
+```{r}
+dogs <- data.frame(dog_name = c("Cupcake", "Fliak"),week_1 = c(20, 17), week_2 = c(21, 30), week_3 = c(24, 40))
+
+  
+```
+
+```{r}
+# --- make data tidy
+dogs_longer <- dogs %>%
+  tidyr::pivot_longer(week_1:week_3, 
+                      names_to = "week",
+                      values_to = "miles")
+```
+
+### pivot_wider
+
+```{r}
+{r}
+dogs <- data.frame(dog_name = c("Cupcake", "Fliak"),week_1 = c(20, 17), week_2 = c(21, 30), week_3 = c(24, 40))
+
+```
+
+### tidyr : : separate()
+
+```{r}
+starwars_split <- starwars %>% 
+  separate(col = name,
+           into = c("first_name", "last_name"), 
+           sep = " ")
+```

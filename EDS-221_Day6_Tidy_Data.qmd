@@ -1,0 +1,44 @@
+---
+title: "EDS-221_Day6_Tidy_Data"
+format: html
+editor: visual
+---
+
+## Tidy data
+
+```{r}
+library(tidyverse)
+```
+
+### pivot_longer
+
+```{r}
+dogs <- data.frame(dog_name = c("Cupcake", "Fliak"),week_1 = c(20, 17), week_2 = c(21, 30), week_3 = c(24, 40))
+
+  
+```
+
+```{r}
+# --- make data tidy
+dogs_longer <- dogs %>%
+  tidyr::pivot_longer(week_1:week_3, 
+                      names_to = "week",
+                      values_to = "miles")
+```
+
+### pivot_wider
+
+```{r}
+{r}
+dogs <- data.frame(dog_name = c("Cupcake", "Fliak"),week_1 = c(20, 17), week_2 = c(21, 30), week_3 = c(24, 40))
+
+```
+
+### tidyr : : separate()
+
+```{r}
+starwars_split <- starwars %>% 
+  separate(col = name,
+           into = c("first_name", "last_name"), 
+           sep = " ")
+```
