@@ -60,7 +60,7 @@ wb_indicators_long <- wb_indicators %>%
 
 #### Step 2: split a year column to ensure that we have a single column with year values
 
-#### Step 3: drop unused columns 
+#### Step 3: drop unused columns
 
 ```{r}
 wb_indicators_clean <- wb_indicators_long %>% 
@@ -75,7 +75,7 @@ wb_indicators_clean
 
 #### 
 
-```{}
+```         
 ```
 
 #### Step 4: Apply pivot_wider to convert unique series name values into columns
